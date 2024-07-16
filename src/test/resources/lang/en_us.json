@@ -1,0 +1,6 @@
+{
+  "test.fromJson": "this comes from a JSON file",
+  "what": {
+    "onEarth": "does this look like"
+  }
+}
