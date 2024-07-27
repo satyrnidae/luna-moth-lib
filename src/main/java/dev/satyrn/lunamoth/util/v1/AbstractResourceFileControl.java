@@ -14,10 +14,11 @@ import java.util.*;
 /**
  * Abstract base class for loading resource files with a specific file extension into a resource bundle.
  *
- * @implSpec Implementations should provide the supported file extension (e.g., "lang" or "json") and handle specific
- *           file formats for those extensions.
- * @author   Isabel Maskrey
- * @since    1.0-SNAPSHOT
+ * @param <T> The resource bundle type.
+ * @implSpec  Implementations should provide the supported file extension (e.g., "lang" or "json") and handle specific
+ *            file formats for those extensions.
+ * @author    Isabel Maskrey
+ * @since     1.0-SNAPSHOT
  */
 public abstract class AbstractResourceFileControl<T extends ResourceBundle> extends ResourceBundle.Control {
     /**

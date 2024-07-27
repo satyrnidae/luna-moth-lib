@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * Custom resource loader which can load files from the disk.
@@ -22,7 +21,6 @@ import java.util.logging.Logger;
  * @since 1.0-SNAPSHOT
  */
 public class FileResourceLoader extends ClassLoader {
-
     private final @NotNull String baseDirectory;
 
     /**

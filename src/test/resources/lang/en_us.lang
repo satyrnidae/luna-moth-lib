@@ -2,3 +2,5 @@ test.result=successful test
 test.format=successful format test {0}
 test.currencyFormat.fail=failed test {0,number,currency} {1,number,currency}
 test.currencyFormat.success=successful test {0,number,currency} {1,number,currency}
+test.fallback=fell back from a different language
+test.fromJson=this translation does not come from an json file

@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  * Represents a {@link ResourceBundle} that uses a Java properties formatted *.lang file as underlying data source.
  *
  * @author Isabel Maskrey
- * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+ * @since 1.0-SNAPSHOT
  */
 // TODO: Could be useful outside of Paper specifically. Extract to Moon Moth common library
 public class LanguageResourceBundle extends PropertyResourceBundle {
@@ -23,7 +23,7 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
      *
      * @param stream The stream to read.
      * @throws IOException if an error occurred when reading resources using any I/O operation.
-     * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+     * @since 1.0-SNAPSHOT
      */
     public LanguageResourceBundle(final @NotNull InputStream stream) throws IOException {
         super(new InputStreamReader(stream, StandardCharsets.UTF_8));
@@ -36,7 +36,7 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
      *
      * @param reader a reader that represents a language file to read from.
      * @throws IOException if an error occurs when reading resources using any I/O operation.
-     * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+     * @since 1.0-SNAPSHOT
      */
     @SuppressWarnings({"unused"})
     public LanguageResourceBundle(InputStreamReader reader) throws IOException {
@@ -50,7 +50,7 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
      * See {@link ResourceBundle.Control} for more details.
      *
      * @author Isabel Maskrey
-     * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+     * @since 1.0-SNAPSHOT
      */
     public final static class Control extends AbstractResourceFileControl<LanguageResourceBundle> {
         /**
@@ -63,7 +63,7 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
          * Additionally, resource files are loaded by a custom resource name with a specific file extension, in this case,
          * {@code "lang"}.
          *
-         * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+         * @since 1.0-SNAPSHOT
          */
         public Control() {
             this("lang");
@@ -79,7 +79,9 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
          * Additionally, resource files are loaded by a custom resource name with a specific file extension, e.g.
          * {@code "lang"}.
          *
-         * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+         * @param fileExtension The file extension that this instance should handle. As this is a properties-style
+         *                      resource handler, this file type should generally be either "lang" or "properties".
+         * @since 1.0-SNAPSHOT
          */
         public Control(String fileExtension) {
             super(fileExtension);
@@ -91,7 +93,7 @@ public class LanguageResourceBundle extends PropertyResourceBundle {
          * @param stream The resource stream for the resource.
          * @return       The new resource bundle from the stream.
          * @throws IOException if an error occurred when reading resources using any I/O operation.
-         * @since 3.0.0-paper-api.1.21-R0.1-SNAPSHOT
+         * @since 1.0-SNAPSHOT
          */
         @Override
         protected @NotNull LanguageResourceBundle newBundle(final @NotNull InputStream stream) throws IOException {
