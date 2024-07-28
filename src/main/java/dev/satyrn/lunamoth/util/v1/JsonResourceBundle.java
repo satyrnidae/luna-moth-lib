@@ -1,9 +1,6 @@
 package dev.satyrn.lunamoth.util.v1;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,9 +32,10 @@ public class JsonResourceBundle extends ResourceBundle {
      *
      * @param  stream The input stream.
      * @throws IOException If any error occurs during I/O operations.
+     * @throws JsonIOException If an IO error causes the JSON parse operation to fail (such as for an empty stream)
      * @since  1.0-SNAPSHOT
      */
-    public JsonResourceBundle(final @NotNull InputStream stream) throws IOException {
+    public JsonResourceBundle(final @NotNull InputStream stream) throws IOException, JsonIOException {
         try (final @NotNull InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
             this.json = JsonParser.parseReader(reader).getAsJsonObject();
         }
@@ -48,10 +46,11 @@ public class JsonResourceBundle extends ResourceBundle {
      * {@link #JsonResourceBundle(InputStream)}, there are no limitations on the character set used to read the files.
      *
      * @param  reader The input stream reader.
+     * @throws JsonIOException if an IO error causes the JSON parse operation to fail (such as for an empty stream).
      * @since  1.0-SNAPSHOT
      */
     @SuppressWarnings({"unused"})
-    public JsonResourceBundle(final @NotNull InputStreamReader reader) {
+    public JsonResourceBundle(final @NotNull InputStreamReader reader) throws JsonIOException {
         this.json = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
@@ -126,10 +125,11 @@ public class JsonResourceBundle extends ResourceBundle {
          * @param  stream The resource stream for the resource.
          * @return The new resource bundle from the stream.
          * @throws IOException if an error occurred when reading resources using any I/O operation.
+         * @throws JsonIOException if an IO exception occurs while attempting to parse the input stream as JSON.
          * @since 1.0-SNAPSHOT
          */
         @Override
-        protected @NotNull JsonResourceBundle newBundle(final @NotNull InputStream stream) throws IOException {
+        protected @NotNull JsonResourceBundle newBundle(final @NotNull InputStream stream) throws IOException, JsonIOException {
             return new JsonResourceBundle(stream);
         }
     }
