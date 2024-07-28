@@ -131,4 +131,17 @@ public final class Cast {
                                          final @Nullable T other) {
         return to(targetClass, object).orElse(other);
     }
+
+    /**
+     * Attempts to cast an {@code object} to {@code String} using {@link #to(Class, Object)}.
+     * @param object the object to convert.
+     * @return If {@code object} is already a {@code String}, then returns the object. If {@code object} is
+     *         {@code null}, returns {@code null}. If {@code object} is not a {@code String} or {@code null}, returns
+     *         the string representation of the object by calling its {@code toString()} method.
+     * @since 1.0-SNAPSHOT
+     * @see #to(Class, Object)
+     */
+    public static @Nullable String toString(final @Nullable Object object) {
+        return orNull(String.class, object);
+    }
 }

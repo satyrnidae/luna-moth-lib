@@ -197,4 +197,15 @@ public class CastTest {
         Formatter objectOrDefaultFormatter = Cast.orNull(Formatter.class, castObjectToFormatter);
         assertNull(objectOrDefaultFormatter);
     }
+
+    @Test
+    public void testToString() {
+        int testValue = 54897;
+        Object testObject = new Object();
+        String testString = "testString";
+        assertEquals(Integer.toString(testValue), Cast.toString(testValue));
+        assertEquals(testString, Cast.toString(testString));
+        assertEquals(testObject.toString(), Cast.toString(testObject));
+        assertNull(null, Cast.toString(null));
+    }
 }
