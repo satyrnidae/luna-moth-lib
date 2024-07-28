@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since  1.0-SNAPSHOT
  */
 public class I18nTest {
-
     /**
      * Creates a new instance of this test class.
      *

@@ -3,6 +3,7 @@ package dev.satyrn.lunamoth.i18n.v1;
 import dev.satyrn.lunamoth.lang.v1.FileResourceLoader;
 import dev.satyrn.lunamoth.util.v1.JsonResourceBundle;
 import dev.satyrn.lunamoth.util.v1.LanguageResourceBundle;
+import dev.satyrn.lunamoth.util.v1.Parameters;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +43,7 @@ public class I18n {
      * Creates a new {@link I18n} instance which only relies on internal resources.
      *
      * @param  baseName The base package name for I18n resource key/value files.
-     * @throws NullPointerException if {@code baseName} is {@code null}
+     * @throws IllegalArgumentException if {@code baseName} is {@code null}
      * @since  1.0-SNAPSHOT
      * @see    #I18n(String, String)
      */
@@ -56,13 +57,13 @@ public class I18n {
      * @param  baseName      the base package name for I18n resource key/value files
      * @param  baseDirectory the base directory where fallback or user-configured custom translations are stored. Can be
      *                       {@code null} if the i18n utility should not support this feature.
-     * @throws NullPointerException if {@code baseName} is {@code null}
+     * @throws IllegalArgumentException if {@code baseName} is {@code null}
      * @since  1.0-SNAPSHOT
      * @see    #I18n(String)
      */
     public I18n(final @NotNull  String baseName,
                 final @Nullable String baseDirectory) {
-        Objects.requireNonNull(baseName);
+        Parameters.requireNonNull("baseName", baseName);
         this.baseName = baseName;
         this.baseDirectory = baseDirectory;
         this.reloadResources();
@@ -103,11 +104,11 @@ public class I18n {
      *
      * @param  locale The locale to represent as a locale string
      * @return        The locale name in the format &lt;language&gt;_&lt;countryCode&gt;
-     * @throws NullPointerException if {@code locale} is {@code null}
+     * @throws IllegalArgumentException if {@code locale} is {@code null}
      * @since 1.0-SNAPSHOT
      */
     public static @NotNull String getLocaleString(final @NotNull Locale locale) {
-        Objects.requireNonNull(locale);
+        Parameters.requireNonNull("locale", locale);
         final @NotNull StringBuilder localeString = new StringBuilder(locale.getLanguage());
         if (locale.getCountry() != null && !locale.getCountry().isBlank()) {
             localeString.append("_").append(locale.getCountry().toLowerCase());
@@ -121,12 +122,12 @@ public class I18n {
      *
      * @param  locale the {@code Locale} to use while loading translations.
      * @return The modified {@code I18n} instance.
-     * @throws NullPointerException if {@code locale} is {@code null}
+     * @throws IllegalArgumentException if {@code locale} is {@code null}
      * @since 1.0-SNAPSHOT
      */
     @Contract(value = "_ -> this", mutates = "this")
     public @NotNull I18n setCurrentLocale(final @NotNull Locale locale) {
-        Objects.requireNonNull(locale);
+        Parameters.requireNonNull("locale", locale);
         this.currentLocale = locale;
         this.reloadResources();
         return this;
@@ -189,8 +190,8 @@ public class I18n {
      *
      * @param resourceType The resource type. May be {@code LANG} or {@code JSON}, but not {@code CUSTOM}.
      * @return The modified {@code I18n} instance.
-     * @throws NullPointerException if {@code resourceType} is {@code null}.
-     * @throws IllegalArgumentException if {@code resourceType} is {@code custom}.
+     * @throws IllegalArgumentException if {@code resourceType} is {@code null}, or if {@code resourceType} is
+     *                                  {@code custom}.
      * @since 1.0-SNAPSHOT
      */
     @Contract(value = "_ -> this", mutates = "this")
@@ -210,15 +211,15 @@ public class I18n {
      * @param customResourceControl The custom resource control for the {@code CUSTOM} {@code resourceType}. Only used
      *                              if {@code resourceType} is set to {@code CUSTOM}, in which case it is required.
      * @return The modified {@code I18n} instance.
-     * @throws NullPointerException if {@code resourceType} is {@code null}
-     * @throws IllegalArgumentException if {@code resourceType} is {@code CUSTOM} but {@code customResourceControl} is
-     *                                  {@code null}
+     * @throws IllegalArgumentException if {@code resourceType} is {@code null}, or if {@code resourceType} is
+     *                                  {@code CUSTOM} but {@code customResourceControl} is {@code null}
      * @since 1.0-SNAPSHOT
      */
+    @SuppressWarnings({"ConstantConditions"})
     @Contract(value = "_, _ -> this", mutates = "this")
     public @NotNull I18n setResourceType(final @NotNull  ResourceType resourceType,
                                          final @Nullable ResourceBundle.Control customResourceControl) {
-        Objects.requireNonNull(resourceType);
+        Parameters.requireNonNull("resourceType", resourceType);
         switch (resourceType) {
             case JSON:
                 this.resourceControl = JSON_FILE_CONTROL;
@@ -227,9 +228,7 @@ public class I18n {
                 this.resourceControl = LANG_FILE_CONTROL;
                 break;
             case CUSTOM:
-                if (customResourceControl == null) {
-                    throw new IllegalArgumentException("resourceType cannot be CUSTOM without a specified customResourceControl");
-                }
+                Parameters.requireNonNull("customResourceControl", customResourceControl);
                 this.resourceControl = customResourceControl;
         }
         this.reloadResources();
@@ -286,11 +285,11 @@ public class I18n {
      *
      * @param locale The locale used to retrieve the cache.
      * @return The cache, or a new cache if one did not exist for the locale.
-     * @throws NullPointerException if {@code locale} is {@code null}
+     * @throws IllegalArgumentException if {@code locale} is {@code null}
      * @since 1.0-SNAPSHOT
      */
     private @NotNull HashMap<String, MessageFormat> getMessageCacheForLocale(final @NotNull Locale locale) {
-        Objects.requireNonNull(locale);
+        Parameters.requireNonNull("locale", locale);
         return this.formatters.computeIfAbsent(getLocaleString(locale), k -> HashMap.newHashMap(32));
     }
 
@@ -299,7 +298,7 @@ public class I18n {
      *
      * @param  key The translation key. Also used as the fallback translation value.
      * @return     The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null}
+     * @throws IllegalArgumentException if {@code key} is {@code null}
      * @since  1.0-SNAPSHOT
      */
     public @NotNull String translate(final @NotNull String key) {
@@ -313,7 +312,7 @@ public class I18n {
      * @param  fallback the fallback translated value
      * @param  format   An array containing objects to use to format the result string.
      * @return The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null} or {@code fallback} is {@code null}
+     * @throws IllegalArgumentException if {@code key} is {@code null} or {@code fallback} is {@code null}
      * @since 1.0-SNAPSHOT
      */
     public @NotNull String format(final @NotNull String key,
@@ -328,7 +327,7 @@ public class I18n {
      * @param  key      The translation key.
      * @param  fallback The fallback translation value.
      * @return          The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null} or if {@code fallback} is {@code null}
+     * @throws IllegalArgumentException if {@code key} is {@code null} or if {@code fallback} is {@code null}
      * @since  1.0-SNAPSHOT
      */
     public @NotNull String translate(final @NotNull String key,
@@ -343,7 +342,7 @@ public class I18n {
      * @param  key      The translation key. Also used as the fallback translation value.
      * @param  format   An array containing objects to use to format the result string.
      * @return          The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null}
+     * @throws IllegalArgumentException if {@code key} is {@code null}
      * @since  1.0-SNAPSHOT
      */
     public @NotNull String translate(final @NotNull  String key,
@@ -359,7 +358,7 @@ public class I18n {
      * @param  fallback The fallback translation value.
      * @param  format   An array containing objects to use to format the result string.
      * @return          The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null} or if {@code fallback} is {@code null}
+     * @throws IllegalArgumentException if {@code key} is {@code null} or if {@code fallback} is {@code null}
      * @since  1.0-SNAPSHOT
      */
     public @NotNull String translate(final @NotNull  String key,
@@ -403,13 +402,13 @@ public class I18n {
      * @param key      The key to translate.
      * @param fallback The translation fallback.
      * @return         The translated string, or {@code fallback} if translation failed for any reason.
-     * @throws NullPointerException if {@code key} is {@code null} or {@code fallback} is {@code null}.
+     * @throws IllegalArgumentException if {@code key} is {@code null} or {@code fallback} is {@code null}.
      * @since 1.0-SNAPSHOT
      */
     private @NotNull String translateRaw(final @NotNull String key,
                                          final @NotNull String fallback) {
-        Objects.requireNonNull(key);
-        Objects.requireNonNull(fallback);
+        Parameters.requireNonNull("key", key);
+        Parameters.requireNonNull("fallback", fallback);
         if (this.externalTranslations != null) {
             try {
                 return this.externalTranslations.getString(key);

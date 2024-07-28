@@ -1,6 +1,7 @@
 package dev.satyrn.lunamoth.storage.v1;
 
 import dev.satyrn.lunamoth.util.v1.Cast;
+import dev.satyrn.lunamoth.util.v1.Parameters;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,8 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
      */
     public MySQLConnectionSupplier(final @NotNull String database,
                                    final @NotNull PasswordAuthentication credentials) {
+        Parameters.requireNonNull("database", database);
+        Parameters.requireNonNull("credentials", credentials);
         this.database = database;
         this.credentials = credentials;
     }
@@ -57,6 +60,7 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
                                    final @NotNull String database,
                                    final @NotNull PasswordAuthentication credentials) {
         this(database, credentials);
+        Parameters.requireNonNull("hostname", hostname);
         this.hostname = hostname;
     }
 
@@ -75,11 +79,7 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
                                    final @NotNull String database,
                                    final @NotNull PasswordAuthentication credentials) {
         this(hostname, database, credentials);
-
-        if (port < 0 || port > 65535) {
-            throw new IllegalArgumentException("port must be within the range [0, 65535]!");
-        }
-
+        Parameters.requireInBounds("port", port, 0, 65535);
         this.port = port;
     }
 
@@ -119,10 +119,11 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
      *          {@code flag} will be cleared.
      * @since 1.0-SNAPSHOT
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings({"UnusedReturnValue"})
     @Contract(value = "_, _ -> this", mutates = "this")
     public @NotNull MySQLConnectionSupplier setFlag(final @NotNull String flag,
                                                     final @Nullable String value) {
+        Parameters.requireNonNull("flag", flag);
         if (value == null || value.isBlank()) {
             this.flags.remove(flag);
         } else {
@@ -143,9 +144,10 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
      *          returned by its {@code toString()} method.
      * @since 1.0-SNAPSHOT
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings({"UnusedReturnValue"})
     @Contract(value = "_ -> this", mutates = "this")
     public @NotNull MySQLConnectionSupplier setFlags(final @NotNull @Unmodifiable Map<?, ?> flags) {
+        Parameters.requireNonNull("flags", flags);
         if (flags.keySet().stream().anyMatch(Objects::isNull)) {
             throw new UnsupportedOperationException("flags cannot contain null keys!");
         }
@@ -170,9 +172,10 @@ public final class MySQLConnectionSupplier implements ConnectionSupplier, AutoCl
      *          excluded.
      * @since 1.0-SNAPSHOT
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings({"UnusedReturnValue"})
     @Contract(value = "_ -> this", mutates = "this")
     public @NotNull MySQLConnectionSupplier setFlags(final @NotNull @Unmodifiable List<Map<?, ?>> flagsList) {
+        Parameters.requireNonNull("flagsList", flagsList);
         flagsList.stream().filter(Objects::nonNull).forEach(this::setFlags);
         return this;
     }
